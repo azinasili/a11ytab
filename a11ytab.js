@@ -50,15 +50,14 @@ function _findIndex(list) {
 
 // Component to build tabs
 function a11ytab(selector, {
-  tabList: tabList = '.js-tab-buttons',
-  tabListItem: tabListItem = '.js-tab-button-item',
-  tabButton: tabButton = '.js-tab-button',
-  tabButtonFocus: tabButtonFocus = 'js-tab-button--is-active',
-  tabButtonBlur: tabButtonBlur = 'js-tab-button--is-disabled',
-  tabPanelContainer: tabPanelContainer = '.js-tab-panels',
-  tabPanel: tabPanel = '.js-tab-panel',
-  tabPanelFocus: tabPanelFocus = 'js-tab-panel--is-active',
-  tabPanelBlur: tabPanelBlur = 'js-tab-panel--is-disabled',
+  tabList: tabList = '.a11ytb-list',
+  tabListItem: tabListItem = '.a11ytb-listitem',
+  tabButton: tabButton = '.a11ytb-button',
+  tabButtonFocus: tabButtonFocus = null,
+  tabButtonBlur: tabButtonBlur = null,
+  tabPanel: tabPanel = '.a11ytb-panel',
+  tabPanelFocus: tabPanelFocus = null,
+  tabPanelBlur: tabPanelBlur = null,
   focusOnLoad: focusOnLoad = false,
 } = {}) {
 
@@ -184,8 +183,9 @@ function a11ytab(selector, {
   function _activateTab(target, focus = true) {
     target.setAttribute('tabindex', 0);
     target.setAttribute('aria-selected', 'true');
-    target.classList.remove(tabButtonBlur);
-    target.classList.add(tabButtonFocus);
+
+    if (tabButtonBlur) target.classList.remove(tabButtonBlur);
+    if (tabButtonFocus) target.classList.add(tabButtonFocus);
 
     if (focus) {
       target.focus();
@@ -197,8 +197,9 @@ function a11ytab(selector, {
     tabs.forEach((tab) => {
       tab.setAttribute('tabindex', -1);
       tab.removeAttribute('aria-selected');
-      tab.classList.remove(tabButtonFocus);
-      tab.classList.add(tabButtonBlur);
+
+      if (tabButtonFocus) tab.classList.remove(tabButtonFocus);
+      if (tabButtonBlur) tab.classList.add(tabButtonBlur);
     });
   }
 
@@ -206,15 +207,17 @@ function a11ytab(selector, {
     let panel = document.getElementById(target.getAttribute('aria-controls'));
 
     panel.removeAttribute('aria-hidden');
-    panel.classList.remove(tabPanelBlur);
-    panel.classList.add(tabPanelFocus);
+
+    if (tabPanelBlur) panel.classList.remove(tabPanelBlur);
+    if (tabPanelFocus) panel.classList.add(tabPanelFocus);
   }
 
   function _disablePanel() {
     panels.forEach((panel) => {
       panel.setAttribute('aria-hidden', 'true');
-      panel.classList.remove(tabPanelFocus);
-      panel.classList.add(tabPanelBlur);
+
+      if (tabPanelFocus) panel.classList.remove(tabPanelFocus);
+      if (tabPanelBlur) panel.classList.add(tabPanelBlur);
     });
   }
 
