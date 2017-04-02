@@ -42,9 +42,9 @@ function _findIndex(list) {
   });
 
   return {
-  currentIndex,
-  prevIndex,
-  nextIndex,
+    currentIndex,
+    prevIndex,
+    nextIndex,
   }
 }
 
