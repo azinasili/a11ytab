@@ -42,9 +42,9 @@ function _findIndex(list) {
   });
 
   return {
-    currentIndex,
-    prevIndex,
-    nextIndex,
+  currentIndex,
+  prevIndex,
+  nextIndex,
   }
 }
 
@@ -92,13 +92,13 @@ function a11ytab(selector, {
   }
   init();
 
-	// Method: Destroy tab component
-	function destroy() {
+  // Method: Destroy tab component
+  function destroy() {
     _removeAlly();
     _removeEvents();
-	}
+  }
 
-	// Method: Focus on previous tab
+  // Method: Focus on previous tab
   function prev() {
     let prevIndex = _findIndex(listItem).prevIndex;
     let prevTab = listItem[prevIndex].firstElementChild;
@@ -147,16 +147,16 @@ function a11ytab(selector, {
       elm.setAttribute('aria-controls', ariaControlValue);
     });
 
-		panels.forEach((elm, i) => {
+    panels.forEach((elm, i) => {
       let ariaLabelValue = tabs[i].getAttribute('id');
 
-			elm.setAttribute('role', 'tabpanel');
-			elm.setAttribute('aria-labelledby', ariaLabelValue);
-		});
+      elm.setAttribute('role', 'tabpanel');
+      elm.setAttribute('aria-labelledby', ariaLabelValue);
+    });
   }
 
   // Remove ARIA and accessibility attributes
-	function _removeAlly() {
+  function _removeAlly() {
     listContainer.forEach((container) => {
       container.removeAttribute('role');
     });
@@ -173,12 +173,12 @@ function a11ytab(selector, {
     });
 
 
-		panels.forEach((panel) => {
-			panel.removeAttribute('role');
-			panel.removeAttribute('aria-hidden');
-			panel.removeAttribute('aria-labelledby');
-		});
-	}
+    panels.forEach((panel) => {
+      panel.removeAttribute('role');
+      panel.removeAttribute('aria-hidden');
+      panel.removeAttribute('aria-labelledby');
+    });
+  }
 
   // Update attributes on buttons and add focus
   function _activateTab(target, focus = true) {
@@ -194,12 +194,12 @@ function a11ytab(selector, {
 
   // Update attributes on buttons and remove focus
   function _disableTab() {
-		tabs.forEach((tab) => {
+    tabs.forEach((tab) => {
       tab.setAttribute('tabindex', -1);
-			tab.removeAttribute('aria-selected');
+      tab.removeAttribute('aria-selected');
       tab.classList.remove(tabButtonFocus);
       tab.classList.add(tabButtonBlur);
-		});
+    });
   }
 
   function _activatePanel(target) {
@@ -211,11 +211,11 @@ function a11ytab(selector, {
   }
 
   function _disablePanel() {
-		panels.forEach((panel) => {
-			panel.setAttribute('aria-hidden', 'true');
+    panels.forEach((panel) => {
+      panel.setAttribute('aria-hidden', 'true');
       panel.classList.remove(tabPanelFocus);
       panel.classList.add(tabPanelBlur);
-		});
+    });
   }
 
   // Click event callback
@@ -251,20 +251,20 @@ function a11ytab(selector, {
   }
 
   // Add events to component
-	function _addEvents() {
-		tabs.forEach((tab) => {
-			tab.addEventListener('click', _tabClick, false);
+  function _addEvents() {
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', _tabClick, false);
       tab.addEventListener('keydown', _tabKeydown, false);
-		});
-	}
+    });
+  }
 
   // Remove component events
-	function _removeEvents() {
-		tabs.forEach((tab) => {
-			tab.removeEventListener('click', _tabClick, false);
+  function _removeEvents() {
+    tabs.forEach((tab) => {
+      tab.removeEventListener('click', _tabClick, false);
       tab.removeEventListener('keydown', _tabKeydown, false);
-		});
-	}
+    });
+  }
 
   // Expose public methods
   return {
