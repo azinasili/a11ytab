@@ -1,31 +1,35 @@
-# A11ytab
-A fully accessible and customizable tabs front-end component. Apply it a single tab or all of your tabs the page. A11ytab allows you to use whatever markup you like, you can apply your own classes and everything will just work.
+# A11yTab
+A fully accessible and customizable tabs front-end component. Apply it a single tab or all of your tabs the page. A11yTab allows you to use whatever markup you like, you can apply your own classes and everything will just work.
 
-## Install
 
-A11ytab is available to install with `npm` and `bower`.
-
-**NPM**
+## Installation
+With [NPM](https://www.npmjs.com/package/a11ytab):
 
 ```bash
 npm install a11ytab --save
 ```
 
-**Bower**
+With [Bower](https://bower.io/):
 
 ```bash
-bower install a11tab --save
+bower install a11ytab --save
 ```
 
-The component will then be available to `import`.
+Or include A11yTab directly:
+
+```html
+<script src="/path/to/a11ytab.js"></script>
+```
+
+A11yTab is written using [ES2015 modules](http://2ality.com/2014/09/es6-modules-final.html). To import A11ytab into an ES2015 application:
 
 ```javascript
-import a11ytab from 'a11ytab';
+import { A11yTab } from 'a11ytab';
 ```
 
-## Usage
 
-A11ytab does require a small amount of markup to function, a containing element, and a list of anchors linked to content containers.
+## Usage
+A11yTab does require a small amount of markup to function, a containing element, and a list of anchors linked to content containers.
 
 ```html
 <div class="a11ytab">
@@ -51,19 +55,33 @@ A11ytab does require a small amount of markup to function, a containing element,
   </div>
 </div>
 ```
-**Note:** *A11ytab only needs a containing element, a list structure for links, and content panels within containing element. Elements to use, source ordering, and other markup is completely customizable.*
+**Note:** *A11yTab only needs a list structure for links and content panels all within a containing element. Elements to use, source ordering, and other markup is completely customizable.*
 
-Assign the function invocation to a variable to initialise the tabs.
+**Note:** *If a specific tab needs to be "activated" on page load, add a class to that tab and pass it to `tabButtonFocus` option.*
 
-```js
-// Select element to initalise a11ytab on
+Select element to initalise A11yTab on.
+
+```javascript
 const tabsEl = document.querySelector('.a11ytab');
-
-// Apply a11ytab to selected element
-const tabs = new a11ytab(tabsEl);
 ```
 
-A11ytab component will handle all ARIA roles/attributes and focus management, transforming the original HTML into the following:
+Apply A11yTab to selected element (all options with default values are shown).
+
+```javascript
+const tabs = new A11yTab(tabsEl, {
+  tabList: '.a11ytab-list',
+  tabListItem: '.a11ytab-listitem',
+  tabButton: '.a11ytab-button',
+  tabButtonFocus: null,
+  tabButtonBlur: null,
+  tabPanel: '.a11ytab-panel',
+  tabPanelFocus: null,
+  tabPanelBlur: null,
+  focusOnLoad: false,
+});
+```
+
+A11yTab will handle all ARIA roles/attributes and focus management, transforming the original HTML into the following:
 
 ```html
 <div class="a11ytab">
@@ -78,66 +96,82 @@ A11ytab component will handle all ARIA roles/attributes and focus management, tr
       <a class="a11ytab-button" id="tab3" href="#panel3" role="tab" aria-controls="panel3" tabindex="-1">...</a>
     </li>
   </ul>
-  <section class="a11ytab-panel" id="panel1" role="tabpanel" aria-labelledby="tab1">
+  <div class="a11ytab-panel" id="panel1" role="tabpanel" aria-labelledby="tab1">
     ...
-  </section>
-  <section class="a11ytab-panel" id="panel2" role="tabpanel" aria-labelledby="tab2" aria-hidden="true">
+  </div>
+  <div class="a11ytab-panel" id="panel2" role="tabpanel" aria-labelledby="tab2" aria-hidden="true">
     ...
-  </section>
-  <section class="a11ytab-panel" id="panel3" role="tabpanel" aria-labelledby="tab3" aria-hidden="true">
+  </div>
+  <div class="a11ytab-panel" id="panel3" role="tabpanel" aria-labelledby="tab3" aria-hidden="true">
     ...
-  </section>
+  </div>
 </div>
 ```
 
+
+### Configuration options
+#### tabList
+**Type:** `String` **Default:** `.a11ytab-list`
+
+**Usage:** List element selector.
+
+#### tabListItem
+**Type:** `String` **Default:** `.a11ytab-listitem`
+
+**Usage:** List item element selector.
+
+#### tabButton
+**Type:** `String` **Default:** `.a11ytab-button`
+
+**Usage:** Anchor element of tab.
+
+#### tabButtonFocus
+**Type:** `String` **Default:** `null`
+
+**Usage:** Class to add to anchor when tab is selector.
+
+#### tabButtonBlur
+**Type:** `String` **Default:** `null`
+
+**Usage:** Class to add to anchor when tab is not selector.
+
+#### tabPanel
+**Type:** `String` **Default:** `.a11ytab-panel`
+
+**Usage:** Container element of panel.
+
+#### tabPanelFocus
+**Type:** `String` **Default:** `null`
+
+**Usage:** Class to add to anchor when panel is selector.
+
+#### tabPanelBlur
+**Type:** `String` **Default:** `null`
+
+**Usage:** Class to add to anchor when panel is not selector.
+
+#### focusOnLoad
+**Type:** `Boolean` **Default:** `false`
+
+**Usage:** Wheather A11ytab should be focused on page load.
+
+
 ### Methods
+#### destroy()
+**Usage:** Kills the instance of A11yTab, removes all event listerners and reverts `HTML` back to intial state.
 
-```javascript
-// Remove all bindings and attributes when no longer needed
-tabs.destroy();
+#### init()
+**Usage:** Creates new instance of A11yTab, adds event listeners, and adds ARIA attributes to passed element.
 
-// Re-initialise as needed
-tabs.init();
+#### prev()
+**Usage:** Focus tab on previous element in list.
 
-// Move focus to previous tab in list
-tabs.prev();
+#### next()
+**Usage:** Focus tab on next element in list.
 
-// Move focus to next tab in list
-tabs.next();
+#### focus()
+**Usage:** Focus on currently active tab.
 
-// Refocus back onto element
-tabs.focus();
-```
 
-### Options
-
-```javascript
-const tabs = new a11ytab(tabsEl, {
-  // String - List selector to transform into tablist
-  tabList: '.a11ytab-list',
-
-  // String - List item selector
-  tabListItem: '.a11ytab-listitem',
-
-  // String - Anchor tab element
-  tabButton: '.a11ytab-button',
-
-  // String - Class to apply to active tab buttons
-  tabButtonFocus: 'a11ytab-button--is-active',
-
-  // String - Class to apply to non-active tab buttons
-  tabButtonBlur: 'a11ytab-button--is-disabled',
-
-  // String - Containers to hold tab content, toggled via tabs
-  tabPanel: '.a11ytab-panel',
-
-  // String - Class to apply to active tab panels
-  tabPanelFocus: 'a11ytab-panel--is-active',
-
-  // String - Class to apply to non-active tab panels
-  tabPanelBlur: 'a11ytab-panel--is-disabled',
-
-  // Boolean - Should a11ytab be focused on page load
-  focusOnLoad: false,
-});
-```
+## License
+MIT License
