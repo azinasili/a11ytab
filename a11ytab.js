@@ -1,5 +1,3 @@
-'use strict';
-
 // Convert element selection to an array
 function _queryToArray(el, ctx = document) {
   return [].slice.call(ctx.querySelectorAll(el));
@@ -49,7 +47,7 @@ function _findIndex(list) {
 }
 
 // Component to build tabs
-function a11ytab(selector, {
+function A11yTab(selector, {
   tabList: tabList = '.a11ytb-list',
   tabListItem: tabListItem = '.a11ytb-listitem',
   tabButton: tabButton = '.a11ytb-button',
@@ -279,4 +277,4 @@ function a11ytab(selector, {
   }
 }
 
-export { a11ytab };
+export { A11yTab };
