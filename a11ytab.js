@@ -1,9 +1,27 @@
-// Convert element selection to an array
+/**
+ * Convert a NodeList selection into an array
+ *
+ * Take a NodeList and convert it to an array
+ * to expose useful array methods and properties.
+ *
+ * @param  {HTMLElement} el             - NodeList to convert to array
+ * @param  {HTMLElement} ctx = document - Context to query for element
+ * @return {Array}                      - Array of nodes
+ */
 function _queryToArray(el, ctx = document) {
   return [].slice.call(ctx.querySelectorAll(el));
 }
 
-// Find closest parent element based on given element
+/**
+ * Get the closest element of a given element
+ *
+ * Take an element (the first param), and traverse the DOM upward
+ * from it until it finds the given element (second parameter).
+ *
+ * @param  {HTMLElement} el       - The element to start from
+ * @param  {HTMLElement} parentEl - The class name
+ * @return {HTMLElement}          - The closest element
+ */
 function _closestEl(el, parentEl) {
   while (el) {
     if (el.matches(parentEl)) break;
@@ -14,17 +32,41 @@ function _closestEl(el, parentEl) {
   return el;
 }
 
-// Get current previous, and next index based on selected element
-// TODO:
-//   1. Fix prevIndex/nextIndex situation
-//   2. Abstract if (condition) so function can be reusable
+/**
+ * Combine two objects based on properties
+ *
+ * @param  {Object} source   - Object with original properties
+ * @param  {Object} override - Object to override source properties
+ * @return {Object}          - Combined object
+ */
+function _extendDefaults(source, override) {
+  for (let property in override) {
+    if (override.hasOwnProperty(property)) {
+      source[property] = override[property];
+    }
+  }
+
+  return source;
+}
+
+/**
+ * Get current previous, and next index based on selected element
+ *
+ * Take an array of elements and return the index of an item(s).
+ *
+ * @todo   Fix prevIndex/nextIndex situation
+ * @todo   Abstract if statement so function can be reusable
+ *
+ * @param  {Array} list - Array of elements
+ * @return {Object}     - Object containing currentIndex, prevIndex, and nextIndex
+ */
 function _findIndex(list) {
   let currentIndex;
   let prevIndex;
   let nextIndex;
 
   list.forEach((item, i) => {
-    if (item.firstElementChild.getAttribute('aria-selected')) {
+    if (item.firstElementChild.getAttribute('aria-selected') === 'true') {
       currentIndex = i;
       prevIndex = --i;
       nextIndex = ++currentIndex;
@@ -46,31 +88,67 @@ function _findIndex(list) {
   }
 }
 
-// Component to build tabs
-function A11yTab(selector, {
-  tabList: tabList = '.a11ytb-list',
-  tabListItem: tabListItem = '.a11ytb-listitem',
-  tabButton: tabButton = '.a11ytb-button',
-  tabButtonFocus: tabButtonFocus = null,
-  tabButtonBlur: tabButtonBlur = null,
-  tabPanel: tabPanel = '.a11ytb-panel',
-  tabPanelFocus: tabPanelFocus = null,
-  tabPanelBlur: tabPanelBlur = null,
-  focusOnLoad: focusOnLoad = false,
-} = {}) {
+/**
+ * Create a new A11yTab instance
+ *
+ * @class  A11yTab
+ * @param  {HTMLElement} selector - Element to initialise A11yTab
+ * @param  {Object} options       - Options to customize A11yTab instance
+ * @return {Object}               - Public init(), desyroy(), prev(), next(), and focus() methods
+ */
+function A11yTab(selector, options) {
 
-  // Collect elements
-  let tabContainer = selector;
-  let listContainer = _queryToArray(tabList, selector);
-  let listItem = _queryToArray(tabListItem, selector);
-  let tabs = _queryToArray(tabButton, selector);
-  let panels = _queryToArray(tabPanel, selector);
+  /**
+   * Default options used in a11ytab
+   */
+  const defaults = {
+    tabList: '.a11ytab-list',
+    tabListItem: '.a11ytab-listitem',
+    tabButton: '.a11ytab-button',
+    tabButtonFocus: null,
+    tabButtonBlur: null,
+    tabPanel: '.a11ytab-panel',
+    tabPanelFocus: null,
+    tabPanelBlur: null,
+    focusOnLoad: false,
+  }
+
+  /**
+   * Combined defaults and user options
+   */
+  let settings;
+
+  /**
+   * If options object passed to a11ytab
+   * Combine options with defaults
+   */
+  if (options && typeof options == 'object') {
+    settings = _extendDefaults(defaults, options);
+  } else {
+    settings = defaults;
+  }
+
+  /**
+   * Collect elements
+   */
   let selected;
+  let tabContainer = selector;
+  let listContainer = _queryToArray(settings.tabList, tabContainer);
+  let listItem = _queryToArray(settings.tabListItem, tabContainer);
+  let tabs = _queryToArray(settings.tabButton, tabContainer);
+  let panels = _queryToArray(settings.tabPanel, tabContainer);
+  let buttonFocus = settings.tabButtonFocus;
+  let buttonBlur = settings.tabButtonBlur;
+  let panelFocus = settings.tabPanelFocus;
+  let panelBlur = settings.tabPanelBlur;
+  let focusOnLoad = settings.focusOnLoad;
 
-  // Find if tab should be focused on inititalization
-  // If no tab is defaulted, focus on first tab
+  /**
+   * Find if tab should be focused on inititalization
+   * If no tab is defaulted, focus on first tab
+   */
   for (let i = 0; i < tabs.length; i++) {
-    if (tabs[i].classList.contains(tabButtonFocus)) {
+    if (tabs[i].classList.contains(buttonFocus)) {
       selected = tabs[i];
       break;
     }
@@ -78,7 +156,11 @@ function A11yTab(selector, {
     selected = tabs[0];
   }
 
-  // Method: Initialize tab component
+  /**
+   * Initialize A11yTab.
+   *
+   * @method
+   */
   function init() {
     _addAlly();
     _disableTab();
@@ -89,13 +171,21 @@ function A11yTab(selector, {
   }
   init();
 
-  // Method: Destroy tab component
+  /**
+   * Remove all added ARIA attributes and events.
+   *
+   * @method
+   */
   function destroy() {
     _removeAlly();
     _removeEvents();
   }
 
-  // Method: Focus on previous tab
+  /**
+   * Make previous tab/panel in list active.
+   *
+   * @method
+   */
   function prev() {
     let prevIndex = _findIndex(listItem).prevIndex;
     let prevTab = listItem[prevIndex].firstElementChild;
@@ -106,7 +196,11 @@ function A11yTab(selector, {
     _activatePanel(prevTab);
   }
 
-  // Method: Focus on next tab
+  /**
+   * Make next tab/panel in list active.
+   *
+   * @method
+   */
   function next() {
     let nextIndex = _findIndex(listItem).nextIndex;
     let nextTab = listItem[nextIndex].firstElementChild;
@@ -117,42 +211,56 @@ function A11yTab(selector, {
     _activatePanel(nextTab);
   }
 
-  // Method: Programically focus on a tab
+  /**
+   * Refocus on active tab/panel.
+   *
+   * @method
+   */
   function focus() {
     tabs.forEach((tab) => {
-      if (tab.getAttribute('aria-selected')) {
+      if (tab.getAttribute('aria-selected') === 'true') {
         _activateTab(tab);
         _activatePanel(tab);
       }
     });
   }
 
-  // Add ARIA and accessibility attributes
+  /**
+   * Add ARIA and accessibility attributes.
+   *
+   * @func
+   */
   function _addAlly() {
-    listContainer.forEach((elm) => {
-      elm.setAttribute('role', 'tablist');
+    listContainer.forEach((container) => {
+      container.setAttribute('role', 'tablist');
     });
 
-    listItem.forEach((elm) => {
-      elm.setAttribute('role', 'presentation');
+    listItem.forEach((item) => {
+      item.setAttribute('role', 'presentation');
     });
 
-    tabs.forEach((elm) => {
-      let ariaControlValue = elm.getAttribute('href').slice(1);
+    tabs.forEach((tab) => {
+      let ariaControlValue = tab.getAttribute('href').slice(1);
 
-      elm.setAttribute('role', 'tab');
-      elm.setAttribute('aria-controls', ariaControlValue);
+      tab.setAttribute('role', 'tab');
+      tab.setAttribute('aria-selected', 'false');
+      tab.setAttribute('aria-controls', ariaControlValue);
     });
 
-    panels.forEach((elm, i) => {
+    panels.forEach((panel, i) => {
       let ariaLabelValue = tabs[i].getAttribute('id');
 
-      elm.setAttribute('role', 'tabpanel');
-      elm.setAttribute('aria-labelledby', ariaLabelValue);
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-hidden', 'true');
+      panel.setAttribute('aria-labelledby', ariaLabelValue);
     });
   }
 
-  // Remove ARIA and accessibility attributes
+  /**
+   * Remove ARIA and accessibility attributes.
+   *
+   * @func
+   */
   function _removeAlly() {
     listContainer.forEach((container) => {
       container.removeAttribute('role');
@@ -169,7 +277,6 @@ function A11yTab(selector, {
       tab.removeAttribute('tabindex');
     });
 
-
     panels.forEach((panel) => {
       panel.removeAttribute('role');
       panel.removeAttribute('aria-hidden');
@@ -177,61 +284,88 @@ function A11yTab(selector, {
     });
   }
 
-  // Update attributes on buttons and add focus
+  /**
+   * Update attributes on buttons and add focus.
+   *
+   * @func
+   * @param {HTMLElement} target   - Tab element to add active attributes on
+   * @param {Boolean} focus = true - Focus on active tab
+   */
   function _activateTab(target, focus = true) {
+    if (buttonBlur) target.classList.remove(buttonBlur);
+    if (buttonFocus) target.classList.add(buttonFocus);
+    if (focus) target.focus();
+
     target.setAttribute('tabindex', 0);
     target.setAttribute('aria-selected', 'true');
-
-    if (tabButtonBlur) target.classList.remove(tabButtonBlur);
-    if (tabButtonFocus) target.classList.add(tabButtonFocus);
-
-    if (focus) {
-      target.focus();
-    }
   }
 
-  // Update attributes on buttons and remove focus
+  /**
+   * Update attributes on buttons and remove focus.
+   *
+   * @func
+   */
   function _disableTab() {
     tabs.forEach((tab) => {
-      tab.setAttribute('tabindex', -1);
-      tab.removeAttribute('aria-selected');
+      if (buttonFocus) tab.classList.remove(buttonFocus);
+      if (buttonBlur) tab.classList.add(buttonBlur);
 
-      if (tabButtonFocus) tab.classList.remove(tabButtonFocus);
-      if (tabButtonBlur) tab.classList.add(tabButtonBlur);
+      tab.setAttribute('tabindex', -1);
+      tab.setAttribute('aria-selected', 'false');
     });
   }
 
+  /**
+   * Update attributes on panels and add focus.
+   *
+   * @func
+   * @param {HTMLElement} target - Panel element to add active attributes
+   */
   function _activatePanel(target) {
     let panel = document.getElementById(target.getAttribute('aria-controls'));
 
-    panel.removeAttribute('aria-hidden');
+    if (panelBlur) panel.classList.remove(panelBlur);
+    if (panelFocus) panel.classList.add(panelFocus);
 
-    if (tabPanelBlur) panel.classList.remove(tabPanelBlur);
-    if (tabPanelFocus) panel.classList.add(tabPanelFocus);
+    panel.setAttribute('aria-hidden', 'false');
   }
 
+  /**
+   * Update attributes on panels and remove focus.
+   *
+   * @func
+   */
   function _disablePanel() {
     panels.forEach((panel) => {
-      panel.setAttribute('aria-hidden', 'true');
+      if (panelFocus) panel.classList.remove(panelFocus);
+      if (panelBlur) panel.classList.add(panelBlur);
 
-      if (tabPanelFocus) panel.classList.remove(tabPanelFocus);
-      if (tabPanelBlur) panel.classList.add(tabPanelBlur);
+      panel.setAttribute('aria-hidden', 'true');
     });
   }
 
-  // Click event callback
+  /**
+   * Click event callback.
+   *
+   * @func
+   * @param {Event} event - Get current target of event
+   */
   function _tabClick(event) {
-    event.preventDefault();
-
     let target = event.currentTarget;
 
+    event.preventDefault();
     _disableTab();
     _disablePanel();
     _activateTab(target);
     _activatePanel(target);
   }
 
-  // Keyboard navigation callback
+  /**
+   * Keyboard navigation callback.
+   *
+   * @func
+   * @param {Event} event - Get current target of event
+   */
   function _tabKeydown(event) {
     if (event.metaKey || event.altKey) return;
 
@@ -251,7 +385,11 @@ function A11yTab(selector, {
     }
   }
 
-  // Add events to component
+  /**
+   * Add events to A11yTab instance.
+   *
+   * @func
+   */
   function _addEvents() {
     tabs.forEach((tab) => {
       tab.addEventListener('click', _tabClick, false);
@@ -259,7 +397,11 @@ function A11yTab(selector, {
     });
   }
 
-  // Remove component events
+  /**
+   * Remove events to A11yTab instance.
+   *
+   * @func
+   */
   function _removeEvents() {
     tabs.forEach((tab) => {
       tab.removeEventListener('click', _tabClick, false);
@@ -267,7 +409,9 @@ function A11yTab(selector, {
     });
   }
 
-  // Expose public methods
+  /**
+   * Expose A11yTab public methods.
+   */
   return {
     init,
     destroy,
@@ -277,4 +421,7 @@ function A11yTab(selector, {
   }
 }
 
-export { A11yTab };
+/**
+ * Export A11yTab component.
+ */
+export default A11yTab;
