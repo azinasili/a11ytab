@@ -24,7 +24,7 @@ Or include A11yTab directly:
 A11yTab is written using [ES2015 modules](http://2ality.com/2014/09/es6-modules-final.html). To import A11ytab into an ES2015 application:
 
 ```javascript
-import { A11yTab } from 'a11ytab';
+import A11yTab from 'a11ytab';
 ```
 
 
