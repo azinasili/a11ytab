@@ -1,5 +1,5 @@
 /**
- * Convert a NodeList selection into an array
+ * Convert a NodeList selection into an array.
  *
  * Take a NodeList and convert it to an array
  * to expose useful array methods and properties.
@@ -13,7 +13,7 @@ function _queryToArray(el, ctx = document) {
 }
 
 /**
- * Get the closest element of a given element
+ * Get the closest element of a given element.
  *
  * Take an element (the first param), and traverse the DOM upward
  * from it until it finds the given element (second parameter).
@@ -33,7 +33,7 @@ function _closestEl(el, parentEl) {
 }
 
 /**
- * Combine two objects based on properties
+ * Combine two objects based on properties.
  *
  * @param  {Object} source   - Object with original properties
  * @param  {Object} override - Object to override source properties
@@ -50,7 +50,7 @@ function _extendDefaults(source, override) {
 }
 
 /**
- * Get current previous, and next index based on selected element
+ * Get current previous, and next index based on selected element.
  *
  * Take an array of elements and return the index of an item(s).
  *
@@ -89,7 +89,7 @@ function _findIndex(list) {
 }
 
 /**
- * Create a new A11yTab instance
+ * Create a new A11yTab instance.
  *
  * @class  A11yTab
  * @param  {HTMLElement} selector - Element to initialise A11yTab
@@ -99,7 +99,7 @@ function _findIndex(list) {
 function A11yTab(selector, options) {
 
   /**
-   * Default options used in a11ytab
+   * Default options used in A11yTab.
    */
   const defaults = {
     tabList: '.a11ytab-list',
@@ -119,8 +119,8 @@ function A11yTab(selector, options) {
   let settings;
 
   /**
-   * If options object passed to a11ytab
-   * Combine options with defaults
+   * If options object passed to A11yTab
+   * Combine options with defaults.
    */
   if (options && typeof options == 'object') {
     settings = _extendDefaults(defaults, options);
@@ -145,7 +145,7 @@ function A11yTab(selector, options) {
 
   /**
    * Find if tab should be focused on inititalization
-   * If no tab is defaulted, focus on first tab
+   * If no tab is defaulted, focus on first tab.
    */
   for (let i = 0; i < tabs.length; i++) {
     if (tabs[i].classList.contains(buttonFocus)) {
@@ -162,7 +162,7 @@ function A11yTab(selector, options) {
    * @method
    */
   function init() {
-    _addAlly();
+    _addARIA();
     _disableTab();
     _disablePanel();
     _activateTab(selected, focusOnLoad);
@@ -177,7 +177,7 @@ function A11yTab(selector, options) {
    * @method
    */
   function destroy() {
-    _removeAlly();
+    _removeARIA();
     _removeEvents();
   }
 
@@ -230,7 +230,7 @@ function A11yTab(selector, options) {
    *
    * @func
    */
-  function _addAlly() {
+  function _addARIA() {
     listContainer.forEach((container) => {
       container.setAttribute('role', 'tablist');
     });
@@ -261,7 +261,7 @@ function A11yTab(selector, options) {
    *
    * @func
    */
-  function _removeAlly() {
+  function _removeARIA() {
     listContainer.forEach((container) => {
       container.removeAttribute('role');
     });
