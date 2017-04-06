@@ -1,6 +1,7 @@
 # A11yTab
 A fully accessible and customizable tabs front-end component. Apply it a single tab or all of your tabs the page. A11yTab allows you to use whatever markup you like, you can apply your own classes and everything will just work.
 
+[DEMO](https://codepen.io/azinasili/pen/MKGwgX?editors=0100)
 
 ## Installation
 With [NPM](https://www.npmjs.com/package/a11ytab):
