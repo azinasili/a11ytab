@@ -162,7 +162,7 @@ function A11yTab(selector, options) {
    * @method
    */
   function init() {
-    _addAlly();
+    _addARIA();
     _disableTab();
     _disablePanel();
     _activateTab(selected, focusOnLoad);
@@ -177,7 +177,7 @@ function A11yTab(selector, options) {
    * @method
    */
   function destroy() {
-    _removeAlly();
+    _removeARIA();
     _removeEvents();
   }
 
@@ -230,7 +230,7 @@ function A11yTab(selector, options) {
    *
    * @func
    */
-  function _addAlly() {
+  function _addARIA() {
     listContainer.forEach((container) => {
       container.setAttribute('role', 'tablist');
     });
@@ -261,7 +261,7 @@ function A11yTab(selector, options) {
    *
    * @func
    */
-  function _removeAlly() {
+  function _removeARIA() {
     listContainer.forEach((container) => {
       container.removeAttribute('role');
     });
