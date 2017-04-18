@@ -1,11 +1,11 @@
 {
   "name": "a11ytab",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A fully accessible and customizable tabs front-end component.",
   "homepage": "https://github.com/azinasili/a11ytab",
-  "authors": "Azin Asili <azinasili@gmail.com>",
+  "authors": "Azin Asili <hello@azinasili.com>",
   "license": "MIT",
-  "main": "a11ytab.js",
+  "main": "dist/a11ytab.js",
   "keywords": [
     "a11ytab",
     "a11y",
@@ -20,6 +20,8 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "bower.json"
+    "bower.json",
+    "package.json",
+    "src"
   ]
 }
