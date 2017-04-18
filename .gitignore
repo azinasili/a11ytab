@@ -1,5 +1,5 @@
-# Compiled source #
-###################
+# Compiled source
+#================
 *.com
 *.class
 *.dll
@@ -7,10 +7,8 @@
 *.o
 *.so
 
-# Compressed #
-##############
-# it's better to unpack these files and commit the raw source
-# git has its own built in compression methods
+# Compressed
+#===========
 *.7z
 *.dmg
 *.gz
@@ -19,14 +17,14 @@
 *.tar
 *.zip
 
-# Logs and databases #
-######################
+# Logs and databases
+#===================
 *.log
 *.sql
 *.sqlite
 
-# OS generated files #
-######################
+# OS generated files
+#===================
 
 # Mac OS
 .DS_Store
@@ -39,8 +37,9 @@
 ehthumbs.db
 Thumbs.db
 
-# Project Specific #
-####################
+# Project Specific
+#=================
 bower_components
 node_modules
 npm-debug.log
+dist

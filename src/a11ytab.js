@@ -94,7 +94,7 @@ function _findIndex(list) {
  * @class  A11yTab
  * @param  {HTMLElement} selector - Element to initialise A11yTab
  * @param  {Object} options       - Options to customize A11yTab instance
- * @return {Object}               - Public init(), desyroy(), prev(), next(), and focus() methods
+ * @return {Object}               - Public init(), destroy(), prev(), next(), and focus() methods
  */
 function A11yTab(selector, options) {
 
@@ -424,4 +424,15 @@ function A11yTab(selector, options) {
 /**
  * Export A11yTab component.
  */
+if (typeof define === 'function' && define.amd) {
+  define(function () { return A11yTab; });
+} else if (typeof exports !== 'undefined') {
+  // Support Node.js specific `module.exports` (which can be a function)
+  if (typeof module !== 'undefined' && module.exports) {
+    exports = module.exports = A11yTab;
+  }
+  // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
+  exports.A11yTab = A11yTab;
+}
+
 export default A11yTab;

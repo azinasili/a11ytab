@@ -1,5 +1,8 @@
+# Don't exclude transpiled files, they are used by npm
+#=====================================================
+# dist
+
 # Exclude everything
-####################
+#===================
 .github
-.editorconfig
-.babelrc
+src
