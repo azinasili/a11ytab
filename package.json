@@ -1,6 +1,6 @@
 {
   "name": "a11ytab",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A fully accessible and customizable tabs front-end component.",
   "homepage": "https://github.com/azinasili/a11ytab",
   "author": "Azin Asili <hello@azinasili.com>",
@@ -24,13 +24,14 @@
     "url": "https://github.com/azinasili/a11ytab/issues"
   },
   "scripts": {
-    "build": "BABEL_ENV=production babel src -d dist",
+    "build": "cross-env BABEL_ENV=production babel src -d dist",
     "prepublish": "npm run build"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-preset-babili": "0.0.12",
     "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1"
+    "babel-preset-stage-2": "^6.24.1",
+    "cross-env": "^4.0.0"
   }
 }
