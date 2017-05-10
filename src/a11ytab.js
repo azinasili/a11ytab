@@ -1,94 +1,4 @@
 /**
- * Convert a NodeList selection into an array.
- *
- * Take a NodeList and convert it to an array
- * to expose useful array methods and properties.
- *
- * @param  {HTMLElement} el             - NodeList to convert to array
- * @param  {HTMLElement} ctx = document - Context to query for element
- * @return {Array}                      - Array of nodes
- */
-function _queryToArray(el, ctx = document) {
-  return [].slice.call(ctx.querySelectorAll(el));
-}
-
-/**
- * Get the closest element of a given element.
- *
- * Take an element (the first param), and traverse the DOM upward
- * from it until it finds the given element (second parameter).
- *
- * @param  {HTMLElement} el       - The element to start from
- * @param  {HTMLElement} parentEl - The class name
- * @return {HTMLElement}          - The closest element
- */
-function _closestEl(el, parentEl) {
-  while (el) {
-    if (el.matches(parentEl)) break;
-
-    el = el.parentElement;
-  }
-
-  return el;
-}
-
-/**
- * Combine two objects based on properties.
- *
- * @param  {Object} source   - Object with original properties
- * @param  {Object} override - Object to override source properties
- * @return {Object}          - Combined object
- */
-function _extendDefaults(source, override) {
-  for (let property in override) {
-    if (override.hasOwnProperty(property)) {
-      source[property] = override[property];
-    }
-  }
-
-  return source;
-}
-
-/**
- * Get current previous, and next index based on selected element.
- *
- * Take an array of elements and return the index of an item(s).
- *
- * @todo   Fix prevIndex/nextIndex situation
- * @todo   Abstract if statement so function can be reusable
- *
- * @param  {Array} list - Array of elements
- * @return {Object}     - Object containing currentIndex, prevIndex, and nextIndex
- */
-function _findIndex(list) {
-  let currentIndex;
-  let prevIndex;
-  let nextIndex;
-
-  list.forEach((item, i) => {
-    if (item.firstElementChild.getAttribute('aria-selected') === 'true') {
-      currentIndex = i;
-      prevIndex = --i;
-      nextIndex = ++currentIndex;
-
-      if (prevIndex === -1) {
-        prevIndex = list.length - 1;
-      }
-
-      if (nextIndex === list.length) {
-        nextIndex = 0;
-      }
-    }
-  });
-
-  return {
-    currentIndex,
-    prevIndex,
-    nextIndex,
-  }
-}
-
-/**
  * Create a new A11yTab instance.
  *
  * @class  A11yTab
@@ -123,15 +33,15 @@ function A11yTab(selector, options) {
    * Combine options with defaults.
    */
   if (options && typeof options == 'object') {
-    settings = _extendDefaults(defaults, options);
+    // settings = _extendDefaults(defaults, options);
+    settings = {...defaults, ...options};
   } else {
-    settings = defaults;
+    settings = {...defaults};
   }
 
   /**
    * Collect elements
    */
-  let selected;
   let tabContainer = selector;
   let listContainer = _queryToArray(settings.tabList, tabContainer);
   let listItem = _queryToArray(settings.tabListItem, tabContainer);
@@ -142,18 +52,17 @@ function A11yTab(selector, options) {
   let panelFocus = settings.tabPanelFocus;
   let panelBlur = settings.tabPanelBlur;
   let focusOnLoad = settings.focusOnLoad;
+  let selected = tabs[0];
 
   /**
    * Find if tab should be focused on inititalization
-   * If no tab is defaulted, focus on first tab.
+   * If no tab is defaulted, first tab will be focused.
    */
   for (let i = 0; i < tabs.length; i++) {
     if (tabs[i].classList.contains(buttonFocus)) {
       selected = tabs[i];
       break;
     }
-
-    selected = tabs[0];
   }
 
   /**
@@ -223,6 +132,79 @@ function A11yTab(selector, options) {
         _activatePanel(tab);
       }
     });
+  }
+
+  /**
+   * Convert a NodeList selection into an array.
+   *
+   * Take a NodeList and convert it to an array
+   * to expose useful array methods and properties.
+   *
+   * @param  {HTMLElement} el             - NodeList to convert to array
+   * @param  {HTMLElement} ctx = document - Context to query for element
+   * @return {Array}                      - Array of nodes
+   */
+  function _queryToArray(el, ctx = document) {
+    return [].slice.call(ctx.querySelectorAll(el));
+  }
+
+  /**
+   * Get the closest element of a given element.
+   *
+   * Take an element (the first param), and traverse the DOM upward
+   * from it until it finds the given element (second parameter).
+   *
+   * @param  {HTMLElement} el       - The element to start from
+   * @param  {HTMLElement} parentEl - The class name
+   * @return {HTMLElement}          - The closest element
+   */
+  function _closestEl(el, parentEl) {
+    while (el) {
+      if (el.matches(parentEl)) break;
+
+      el = el.parentElement;
+    }
+
+    return el;
+  }
+
+  /**
+   * Get current previous, and next index based on selected element.
+   *
+   * Take an array of elements and return the index of an item(s).
+   *
+   * @todo   Fix prevIndex/nextIndex situation
+   * @todo   Abstract if statement so function can be reusable
+   *
+   * @param  {Array} list - Array of elements
+   * @return {Object}     - Object containing currentIndex, prevIndex, and nextIndex
+   */
+  function _findIndex(list) {
+    let currentIndex;
+    let prevIndex;
+    let nextIndex;
+
+    list.forEach((item, i) => {
+      if (item.firstElementChild.getAttribute('aria-selected') === 'true') {
+        currentIndex = i;
+        prevIndex = --i;
+        nextIndex = ++currentIndex;
+
+        if (prevIndex === -1) {
+          prevIndex = list.length - 1;
+        }
+
+        if (nextIndex === list.length) {
+          nextIndex = 0;
+        }
+      }
+    });
+
+    return {
+      currentIndex,
+      prevIndex,
+      nextIndex,
+    }
   }
 
   /**
@@ -424,15 +406,4 @@ function A11yTab(selector, options) {
 /**
  * Export A11yTab component.
  */
-if (typeof define === 'function' && define.amd) {
-  define(function () { return A11yTab; });
-} else if (typeof exports !== 'undefined') {
-  // Support Node.js specific `module.exports` (which can be a function)
-  if (typeof module !== 'undefined' && module.exports) {
-    exports = module.exports = A11yTab;
-  }
-  // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
-  exports.A11yTab = A11yTab;
-}
-
 export default A11yTab;
