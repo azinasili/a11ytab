@@ -42,7 +42,6 @@ function A11yTab(selector, options) {
   /**
    * Collect elements
    */
-  let selected;
   let tabContainer = selector;
   let listContainer = _queryToArray(settings.tabList, tabContainer);
   let listItem = _queryToArray(settings.tabListItem, tabContainer);
@@ -53,18 +52,17 @@ function A11yTab(selector, options) {
   let panelFocus = settings.tabPanelFocus;
   let panelBlur = settings.tabPanelBlur;
   let focusOnLoad = settings.focusOnLoad;
+  let selected = tabs[0];
 
   /**
    * Find if tab should be focused on inititalization
-   * If no tab is defaulted, focus on first tab.
+   * If no tab is defaulted, first tab will be focused.
    */
   for (let i = 0; i < tabs.length; i++) {
     if (tabs[i].classList.contains(buttonFocus)) {
       selected = tabs[i];
       break;
     }
-
-    selected = tabs[0];
   }
 
   /**
