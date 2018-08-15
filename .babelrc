@@ -1,11 +1,12 @@
 {
   "presets": [
-    "es2015",
-    "stage-2"
+    ["env", { "modules": false }]
   ],
   "env": {
-    "production": {
-      "presets": ["babili"]
+    "test": {
+      "presets": [
+        ["env"]
+      ]
     }
   }
 }
