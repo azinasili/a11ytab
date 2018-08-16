@@ -1,5 +1,6 @@
 src/
 .babelrc
 .editorconfig
-.eslint
+.eslintrc
+.travis.yml
 rollup.config.js
