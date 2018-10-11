@@ -9,7 +9,20 @@
 export default class A11yTab {
   /**
    * Create Settings for A11yTab
-   * @param {Object} options - Options to customize A11yTab instance
+   * @param {Object}      options                    = null                 - Options to customize A11yTab instance
+   * @param {HTMLElement} options.selector           = null                 - Containing element for tabs
+   * @param {String}      options.tabFocus           = null                 - Class to add to tabs when focused
+   * @param {String}      options.tabBlur            = null                 - Class to add to tabs when not focused
+   * @param {String}      options.tabPanelFocus      = null                 - Class to add to panel when active
+   * @param {String}      options.tabPanelBlur       = null                 - Class to add to panel when not active
+   * @param {Boolean}     options.focusOnLoad        = false                - Move users focus to tab component on page load
+   * @param {Function}    options.afterFocusFunction = 'a11ytab:afterFocus' - Function to run after focusing on tab
+   * @param {Function}    options.beforeBlurFunction = 'a11ytab:beforeBlur' - Function to run before focusing on tab
+   * @param {Boolean}     options.addEvents          = false                - Add custom A11yTab events
+   * @param {String}      options.eventAfterFocus    = null                 - Name of custom event to fire after focusing on tab
+   * @param {String}      options.eventBeforeBlur    = null                 - Name of custom event to fire before leaving focus on tab
+   * @param {Boolean}     options.hashNavigation     = false                - Append focused tab id to URL
+   * @param {HTMLElement} options.tabToFocus         = null                 - Tab element to initially make active
    */
   constructor(options) {
     const defaults = {
