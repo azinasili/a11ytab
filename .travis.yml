@@ -5,7 +5,7 @@ cache:
   directories:
   - node_modules
 script:
-  - npm run build
+  - npm run publish
 deploy:
   provider: npm
   email: hello@azinasili.com

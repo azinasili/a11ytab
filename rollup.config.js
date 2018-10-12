@@ -17,7 +17,7 @@ export default {
     {
       banner,
       file: pkg.main,
-      format: 'umd',
+      format: 'iife',
       name: `${capitalizeFirstLetter(pkg.name)}`,
     },
     {
