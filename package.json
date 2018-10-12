@@ -1,6 +1,7 @@
 {
   "name": "a11ytab",
-  "version": "2.0.2",
+  "realname": "A11yTab",
+  "version": "2.0.3",
   "description": "A fully accessible and customizable tabs front-end component.",
   "homepage": "https://github.com/azinasili/a11ytab",
   "author": "Azin Asili <hello@azinasili.com>",

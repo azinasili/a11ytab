@@ -2,10 +2,8 @@ import { eslint } from 'rollup-plugin-eslint';
 import babel from 'rollup-plugin-babel';
 import pkg from './package.json';
 
-const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
-
 const banner = `/*!
- * ${capitalizeFirstLetter(pkg.name)} v${pkg.version}
+ * ${pkg.realname} v${pkg.version}
  * (c) 2017-${new Date().getFullYear()} ${pkg.author}
  * MIT License.
  */
@@ -18,7 +16,7 @@ export default {
       banner,
       file: pkg.main,
       format: 'iife',
-      name: `${capitalizeFirstLetter(pkg.name)}`,
+      name: pkg.realname,
     },
     {
       banner,
