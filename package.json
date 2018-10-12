@@ -1,6 +1,6 @@
 {
   "name": "a11ytab",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A fully accessible and customizable tabs front-end component.",
   "homepage": "https://github.com/azinasili/a11ytab",
   "author": "Azin Asili <hello@azinasili.com>",
@@ -36,19 +36,18 @@
     "access": "public"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-object-assign": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
     "babel-jest": "^23.6.0",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-object-assign": "^6.22.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-minify": "^0.5.0",
     "eslint": "^5.6.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.10.0",
     "jest": "^23.6.0",
     "npm-watch": "^0.4.0",
-    "rollup": "^0.66.5",
+    "rollup": "^0.66.6",
     "rollup-plugin-babel": "^4.0.3",
-    "rollup-plugin-eslint": "^5.0.0",
-    "rollup-plugin-uglify": "^6.0.0"
+    "rollup-plugin-eslint": "^5.0.0"
   }
 }

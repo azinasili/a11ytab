@@ -1,11 +1,16 @@
 {
+  "comments": false,
   "presets": [
-    ["env", { "modules": false }]
+    [
+      "@babel/preset-env", { "modules": false },
+      "@babel/transform-object-assign"
+    ],
+    "babel-preset-minify"
   ],
   "env": {
     "test": {
       "presets": [
-        ["env"]
+        ["@babel/preset-env"]
       ]
     }
   }

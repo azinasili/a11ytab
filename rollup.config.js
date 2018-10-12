@@ -1,6 +1,5 @@
-import eslint from 'rollup-plugin-eslint';
+import { eslint } from 'rollup-plugin-eslint';
 import babel from 'rollup-plugin-babel';
-import uglify from 'rollup-plugin-uglify';
 import pkg from './package.json';
 
 const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
@@ -33,20 +32,6 @@ export default {
       throwOnError: true,
       throwOnWarning: true,
     }),
-    babel({
-      plugins: [
-        'external-helpers',
-        'transform-object-assign',
-      ],
-    }),
-    uglify({
-      output: {
-        comments: '/^!/',
-      },
-      compress: {
-        drop_console: true,
-        pure_funcs: 'warn',
-      },
-    }),
+    babel(),
   ],
 };

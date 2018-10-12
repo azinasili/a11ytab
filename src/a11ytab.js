@@ -7,6 +7,7 @@
  * A11yTab
  */
 export default class A11yTab {
+  /* eslint-disable max-len */
   /**
    * Create Settings for A11yTab
    * @param {Object}      options                    = null                 - Options to customize A11yTab instance
@@ -24,6 +25,7 @@ export default class A11yTab {
    * @param {Boolean}     options.hashNavigation     = false                - Append focused tab id to URL
    * @param {HTMLElement} options.tabToFocus         = null                 - Tab element to initially make active
    */
+  /* eslint-enable */
   constructor(options) {
     const defaults = {
       selector: null,
